@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Intro to MapView - Create a 2D map | Sample | ArcGIS Maps SDK for JavaScript 4.29</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #viewDiv {
+            height: 70%;
+            width: 100%;
+        }
+
+        #headerDiv {
+            height: 10%;
+            background-color: #336;
+            color: yellow;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        #mapView {
+            height: 5%;
+            background-color: #f2f2f2;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+    
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/widgets/Legend",
+            "esri/widgets/ScaleBar",
+            "esri/widgets/Search",
+            "esri/widgets/LayerList",
+            "esri/request"
+        ], function(Map, MapView, FeatureLayer, Legend, ScaleBar, Search, LayerList, request) {
+            const map = new Map({
+                basemap: "topo-vector"
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                zoom: 5,
+                center: [224, 40] // longitude, latitude
+            });
+
+            const featureLayer = new FeatureLayer({
+                url:"https://www.geosceneonline.cn/server/rest/services/Hosted/%E7%BE%8E%E5%9B%BD%E5%85%AC%E5%85%B1%E4%BA%8B%E4%BB%B6_1123/FeatureServer"
+            });
+
+            map.add(featureLayer);
+
+            let legend = new Legend({
+                view: view
+            });
+
+            view.ui.add(legend, "bottom-right");
+
+            let scaleBar = new ScaleBar({
+                view: view,
+                style: "ruler",
+                unit: "non-metric",
+            });
+
+            view.ui.add(scaleBar, {
+                position: "bottom-left"
+            });
+
+            const searchWidget = new Search({
+                view: view
+            });
+
+            view.ui.add(searchWidget, {
+                position: "top-left",
+                index: 2
+            });
+
+            let layerList = new LayerList({
+                view: view
+            });
+
+            view.ui.add(layerList, {
+                position: "top-left"
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="headerDiv">
+        <h1>美国公共事件</h1>
+    </div>
+    <div id="viewDiv"></div>
+    <div id="mapView">Legend, ScaleBar, Search, LayerList</div>
+</body>
+</html>
